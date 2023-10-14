@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8098823779534125919}
   - component: {fileID: 8098823779534125912}
   - component: {fileID: 3184204510271829878}
+  - component: {fileID: -4009176252683363896}
   m_Layer: 0
   m_Name: Fish Eye
   m_TagString: FishEye
@@ -97,6 +98,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67064b47eb0e3472ebc69c3131e1a053, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fishEyePrefab: {fileID: 8098823779534125918}
   explosionEffectPrefab: {fileID: 7505777410700197010, guid: 9b56e295d096442838d69244fcc63570, type: 3}
   radius: 0.18
+--- !u!114 &-4009176252683363896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8098823779534125918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f97b7e0e8d75483fb78939d053f942a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fishEye: {fileID: 8098823779534125918}
+  pointPrefab: {fileID: 4389657809342474396, guid: 56a277d99d3e14c858ecfa264056fc80, type: 3}
+  linePrefab: {fileID: 5587092201998267516, guid: 1d4ef7fcfa98842a186fb2a8dfe31f0e, type: 3}
+  fishSizeRatio: 1

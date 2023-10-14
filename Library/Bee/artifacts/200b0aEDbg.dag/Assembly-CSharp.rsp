@@ -353,6 +353,7 @@
 -r:"Library/Bee/artifacts/200b0aEDbg.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/200b0aEDbg.dag/UnityEngine.UI.ref.dll"
 "Assets/EyeCollisionDetector.cs"
+"Assets/FishBody.cs"
 "Assets/FishEyeLauncher.cs"
 "Assets/READ_ME.cs"
 "Assets/Resources/Manager.cs"
