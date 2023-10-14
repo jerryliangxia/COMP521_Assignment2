@@ -8,16 +8,22 @@ public class FishBody : MonoBehaviour
     private GameObject[] points;
     private GameObject[] lines;
 
-    private Vector3[] positions = new Vector3[9];
-    
+    private Vector3[] positions;
+    private Vector3[] previousPositions;
+    private Vector3[] accelerations;
+
     public float fishSizeRatio = 1.0f;
+    public float stiffness = 0.1f;
+    public float damping = 0.1f;
 
     void Start()
     {
         int numVertices = 9;
         points = new GameObject[numVertices];
         lines = new GameObject[numVertices];
-        // Vector3[] positions = new Vector3[numVertices];
+        positions = new Vector3[numVertices];
+        previousPositions = new Vector3[numVertices];
+        accelerations = new Vector3[numVertices];
 
         // Define positions relative to fishEye to form a fish shape
         positions[0] = new Vector3(-0.2f, 0.1f, 0); // Top of the fish
@@ -47,6 +53,7 @@ public class FishBody : MonoBehaviour
                 position.x *= -1;
             }
             points[i].transform.localPosition = position;
+            previousPositions[i] = points[i].transform.localPosition;
         }
 
         // Connect the lines between the points to form a fish shape
@@ -62,6 +69,15 @@ public class FishBody : MonoBehaviour
     {
         for (int i = 0; i < points.Length; i++)
         {
+            // Calculate acceleration based on Hooke's law
+            Vector3 displacement = points[i].transform.localPosition - positions[i] * fishSizeRatio;
+            accelerations[i] = -stiffness * displacement - damping * (points[i].transform.localPosition - previousPositions[i]) / Time.deltaTime;
+
+            // Update positions using Verlet integration
+            Vector3 newPosition = 2 * points[i].transform.localPosition - previousPositions[i] + accelerations[i] * Time.deltaTime * Time.deltaTime;
+            previousPositions[i] = points[i].transform.localPosition;
+            points[i].transform.localPosition = newPosition;
+
             // Update line positions
             LineRenderer lr = lines[i].GetComponent<LineRenderer>();
             lr.SetPosition(0, points[i].transform.position);
