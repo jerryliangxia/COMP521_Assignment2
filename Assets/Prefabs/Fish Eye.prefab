@@ -116,3 +116,5 @@ MonoBehaviour:
   pointPrefab: {fileID: 4389657809342474396, guid: 56a277d99d3e14c858ecfa264056fc80, type: 3}
   linePrefab: {fileID: 5587092201998267516, guid: 1d4ef7fcfa98842a186fb2a8dfe31f0e, type: 3}
   fishSizeRatio: 1
+  stiffness: 0.1
+  damping: 0.1

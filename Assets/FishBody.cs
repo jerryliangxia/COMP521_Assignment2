@@ -9,12 +9,18 @@ public class FishBody : MonoBehaviour
     private GameObject[] lines;
 
     private Vector3[] positions;
+    private bool[] isFixed;
+    private float timer;
     private Vector3[] previousPositions;
     private Vector3[] accelerations;
 
     public float fishSizeRatio = 1.0f;
     public float stiffness = 0.1f;
     public float damping = 0.1f;
+    
+    private Vector2 point1 = new Vector2(1, 0.5f);
+    private Vector2 point2 = new Vector2(0, 3);
+    private Vector2 point3 = new Vector2(-1, 0.5f);
 
     void Start()
     {
@@ -24,6 +30,8 @@ public class FishBody : MonoBehaviour
         positions = new Vector3[numVertices];
         previousPositions = new Vector3[numVertices];
         accelerations = new Vector3[numVertices];
+        isFixed = new bool[numVertices];
+        timer = 0f;
 
         // Define positions relative to fishEye to form a fish shape
         positions[0] = new Vector3(-0.2f, 0.1f, 0); // Top of the fish
@@ -67,8 +75,28 @@ public class FishBody : MonoBehaviour
 
     void Update()
     {
+        timer += Time.deltaTime;
         for (int i = 0; i < points.Length; i++)
         {
+            Vector2 point = new Vector2(points[i].transform.position.x, points[i].transform.position.y);
+
+            // Check if point is inside triangle or on the ground
+            // int maxIterations = 1;
+            // for (int iteration = 0; iteration < maxIterations; iteration++)
+            // {
+                if (timer > 1f && !isFixed[i] && (IsInsideTriangle(point, point1, point2, point3) ||
+                                                  (point.x >= -10.5f && point.x <= -7.5f && point.y <= 0.5f) ||
+                                                  (point.x >= 7.5f && point.x <= 10.5f && point.y <= 0.5f)))
+                {
+                    isFixed[i] = true; // Stop updating this point
+                }
+
+                if (isFixed[i])
+                {
+                    continue; // Skip updating this point
+                }
+            // }
+
             // Calculate acceleration based on Hooke's law
             Vector3 displacement = points[i].transform.localPosition - positions[i] * fishSizeRatio;
             accelerations[i] = -stiffness * displacement - damping * (points[i].transform.localPosition - previousPositions[i]) / Time.deltaTime;
@@ -83,5 +111,16 @@ public class FishBody : MonoBehaviour
             lr.SetPosition(0, points[i].transform.position);
             lr.SetPosition(1, points[(i + 1) % points.Length].transform.position);
         }
+    }
+    
+    bool IsInsideTriangle(Vector2 point, Vector2 point1, Vector2 point2, Vector2 point3)
+    {
+        float alpha = ((point2.y - point3.y) * (point.x - point3.x) + (point3.x - point2.x) * (point.y - point3.y)) /
+                      ((point2.y - point3.y) * (point1.x - point3.x) + (point3.x - point2.x) * (point1.y - point3.y));
+        float beta = ((point3.y - point1.y) * (point.x - point3.x) + (point1.x - point3.x) * (point.y - point3.y)) /
+                     ((point2.y - point3.y) * (point1.x - point3.x) + (point3.x - point2.x) * (point1.y - point3.y));
+        float gamma = 1.0f - alpha - beta;
+
+        return alpha > 0 && beta > 0 && gamma > 0;
     }
 }
