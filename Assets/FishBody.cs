@@ -81,21 +81,22 @@ public class FishBody : MonoBehaviour
             Vector2 point = new Vector2(points[i].transform.position.x, points[i].transform.position.y);
 
             // Check if point is inside triangle or on the ground
-            // int maxIterations = 1;
-            // for (int iteration = 0; iteration < maxIterations; iteration++)
-            // {
-                if (timer > 1f && !isFixed[i] && (IsInsideTriangle(point, point1, point2, point3) ||
-                                                  (point.x >= -10.5f && point.x <= -7.5f && point.y <= 0.5f) ||
-                                                  (point.x >= 7.5f && point.x <= 10.5f && point.y <= 0.5f)))
+            if (timer > 1f && !isFixed[i])
+            {
+                
+                int maxIterations = 10;
+                for (int iteration = 0; iteration < maxIterations; iteration++)
                 {
-                    isFixed[i] = true; // Stop updating this point
+                    bool constraintCheck = (IsInsideTriangle(point, point1, point2, point3) || isInLeftPond(point) ||
+                                            isInRightPond(point));
+                    isFixed[i] = constraintCheck; // Stop updating this point
                 }
+            }
 
-                if (isFixed[i])
-                {
-                    continue; // Skip updating this point
-                }
-            // }
+            if (isFixed[i])
+            {
+                continue; // Skip updating this point
+            }
 
             // Calculate acceleration based on Hooke's law
             Vector3 displacement = points[i].transform.localPosition - positions[i] * fishSizeRatio;
@@ -111,6 +112,16 @@ public class FishBody : MonoBehaviour
             lr.SetPosition(0, points[i].transform.position);
             lr.SetPosition(1, points[(i + 1) % points.Length].transform.position);
         }
+    }
+    
+    bool isInLeftPond(Vector2 point)
+    {
+        return (point.x >= -10.5f && point.x <= -7.5f && point.y <= 0.5f);
+    }
+        
+    bool isInRightPond(Vector2 point)
+    {
+        return (point.x >= 7.5f && point.x <= 10.5f && point.y <= 0.5f);
     }
     
     bool IsInsideTriangle(Vector2 point, Vector2 point1, Vector2 point2, Vector2 point3)
