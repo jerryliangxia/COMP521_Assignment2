@@ -97,4 +97,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67064b47eb0e3472ebc69c3131e1a053, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fishEyePrefab: {fileID: 8098823779534125918}
+  explosionEffectPrefab: {fileID: 7505777410700197010, guid: 9b56e295d096442838d69244fcc63570, type: 3}
   radius: 0.18

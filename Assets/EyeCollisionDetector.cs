@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EyeCollisionDetector : MonoBehaviour
 {
+    public GameObject explosionEffectPrefab; // Assign this in the inspector
     public float radius = 0.18f; // Adjust as needed
     private GameObject[] fishEyes;
 
@@ -26,8 +27,16 @@ public class EyeCollisionDetector : MonoBehaviour
             if (fishEye != gameObject && IsCollidingWith(fishEye))
             {
                 Debug.Log("Collision detected with " + fishEye.name);
-                SetColor(gameObject, Color.red);
-                SetColor(fishEye, Color.red);
+                
+                // Instantiate explosion effect at collision point
+                Instantiate(explosionEffectPrefab, fishEye.transform.position, Quaternion.identity);
+                
+                // Destroy both FishEye objects
+                Destroy(gameObject);
+                Destroy(fishEye);
+                
+                // Exit the loop since this object no longer exists
+                break;
             }
         }
     }
