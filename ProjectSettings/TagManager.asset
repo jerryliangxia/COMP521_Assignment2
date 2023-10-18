@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - FishEye
+  - Land
+  - Pond
   layers:
   - Default
   - TransparentFX
